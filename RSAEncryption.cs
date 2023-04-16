@@ -26,6 +26,13 @@ namespace PasswordManager2
             xs.Serialize(sw, _publicKey);
             return sw.ToString();
         }
+        public String GetPrivateKey()
+        {
+            var sw = new StringWriter();
+            var xs = new XmlSerializer(typeof(RSAParameters));
+            xs.Serialize(sw, _privateKey);
+            return sw.ToString();
+        }
         public String Encrypt(String Password)
         {
             rsaprovider = new RSACryptoServiceProvider();

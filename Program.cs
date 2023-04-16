@@ -11,48 +11,21 @@ using System;
 
 internal class Program
 {
-    //public static class JsonFileUtils
-    //{
-    //    private static readonly JsonSerializerOptions _options =
-    //        new() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
-
-    //    public static void SimpleWrite(object obj, string fileName)
-    //    {
-    //        var jsonString = JsonSerializer.Serialize(obj, _options);
-    //        File.WriteAllText(fileName, jsonString);
-    //    }
-    //}
-    //public static class JsonFileUtils
-    //{
-    //    public static readonly JsonSerializerSettings _options
-    //       = new() { NullValueHandling = NullValueHandling.Ignore };
-
-    //    public static void SimpleWrite(object obj, string fileName)
-    //    {
-    //        var jsonString = JsonConvert.SerializeObject(obj, _options);
-    //        File.WriteAllText(fileName, jsonString);
-    //    }
-    //}
-
-    //public static void StreamWrite(object obj, string fileName)
-    //{
-
-    //    var filename = "products.json";
-    //    using var fileStream = File.Create(filename);
-    //    using var utf8JsonWriter = new Utf8JsonWriter(fileStream);
-    //    System.Text.Json.JsonSerializer.Serialize(utf8JsonWriter, obj, _options);
-    //}
-
-
-    private static void Main(string[] args)
+    public  static void Main(string[] args)
     {
-        //StreamWriter str = new StreamWriter("products.json");
+       
        PasswordOne passwordOne = new PasswordOne();
-        RSAEncryption rsa = new RSAEncryption();
-        
-        string cypher = string.Empty;
+        EASSymetricKey eass = new EASSymetricKey();
+       // var key = "b14ca5898a4e4133bbce2ea2315a1916";
+ 
+     Console.WriteLine("Please enter a secret key for the symmetric algorithm.");
+        var key = Console.ReadLine();
 
-        Console.WriteLine($"public Key : {rsa.GetPublicKey()}\n");
+        //Console.WriteLine(key);
+       key = "b14ca5898a4e4133bbce2ea2315a1916";
+        // RSAEncryption rsa = new RSAEncryption();
+
+        string cypher = string.Empty;
         Console.WriteLine("Enter your acount name :");
         var AcountName = Console.ReadLine();
         Console.WriteLine("Enter your name :");
@@ -63,15 +36,12 @@ internal class Program
 
         {
 
-            cypher = rsa.Encrypt(Password);
-
-              passwordOne = new(AcountName, UserName, cypher);
+            cypher = eass.EncryptString(key,Password);
+            passwordOne = new(AcountName, UserName, cypher);
             var AllPasswordones = passwordOne.GetPasswordsOnes();
             AllPasswordones.Add(passwordOne);
-            var fileName = @"products.json";
             string json = System.Text.Json.JsonSerializer.Serialize(AllPasswordones);
             File.WriteAllText(@"C:\Users\WEHBA\OneDrive\Skrivebord\products.json", json);
-
             StreamReader r = new StreamReader(@"C:\Users\WEHBA\OneDrive\Skrivebord\products.json");
             string Json = r.ReadToEnd();
             Console.WriteLine($"Your Creidential  is :\n Acount name : {AcountName}\n Name : {UserName}\n Password: {cypher}");
@@ -80,17 +50,12 @@ internal class Program
             {
 
                 Console.WriteLine(@" {0}   {1}   {2} " , item.AcountName,item.UserName,item.password);
-            }
-         
-           
+            }     
         }
-       
-        
-     
-
+      
         Console.WriteLine(" Press any key to Decrypt the Password as yopu enteres ");
         Console.ReadLine();
-        var plainText = rsa.Decrypt(cypher);
+        var plainText =eass.DecryptString(key,cypher);
         Console.WriteLine($"Decrypted Password is : {plainText}");
     }
 }
