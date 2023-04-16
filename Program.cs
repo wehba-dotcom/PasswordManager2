@@ -17,12 +17,27 @@ internal class Program
        PasswordOne passwordOne = new PasswordOne();
         EASSymetricKey eass = new EASSymetricKey();
        // var key = "b14ca5898a4e4133bbce2ea2315a1916";
- 
-     Console.WriteLine("Please enter a secret key for the symmetric algorithm.");
-        var key = Console.ReadLine();
+        
+        bool correctMasterpassword = false;
+        var key = "b14ca5898a4e4133bbce2ea2315a1916";
 
+        while (!correctMasterpassword) 
+        {
+            Console.WriteLine("Please enter a secret key for the symmetric algorithm.");
+            var attemtedkey = Console.ReadLine();
+           if (attemtedkey == key) 
+            { 
+                correctMasterpassword = true;
+            }
+            else
+            {
+                Console.WriteLine("Inccorect Masterpassword");
+
+            }
+
+        }
         //Console.WriteLine(key);
-       key = "b14ca5898a4e4133bbce2ea2315a1916";
+
         // RSAEncryption rsa = new RSAEncryption();
 
         string cypher = string.Empty;
@@ -41,8 +56,8 @@ internal class Program
             var AllPasswordones = passwordOne.GetPasswordsOnes();
             AllPasswordones.Add(passwordOne);
             string json = System.Text.Json.JsonSerializer.Serialize(AllPasswordones);
-            File.WriteAllText(@"C:\Users\WEHBA\OneDrive\Skrivebord\products.json", json);
-            StreamReader r = new StreamReader(@"C:\Users\WEHBA\OneDrive\Skrivebord\products.json");
+            File.WriteAllText(@"C:\Users\londo\OneDrive\desktop\products.json", json);
+            StreamReader r = new StreamReader(@"C:\Users\londo\OneDrive\desktop\products.json");
             string Json = r.ReadToEnd();
             Console.WriteLine($"Your Creidential  is :\n Acount name : {AcountName}\n Name : {UserName}\n Password: {cypher}");
             AllPasswordones = JsonConvert.DeserializeObject<List<PasswordOne>>(Json);
